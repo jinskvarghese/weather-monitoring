@@ -1,5 +1,7 @@
 package com.example.weathermonitoring.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -7,17 +9,17 @@ import jakarta.persistence.Id;
 
 @Entity
 public class WeatherData {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
     private String city;
     private String mainCondition;
     private double temperature;
     private double feelsLike;
-    private long timestamp;
+    private LocalDateTime timestamp;
 
-    // Getters and Setters
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -58,11 +60,11 @@ public class WeatherData {
         this.feelsLike = feelsLike;
     }
 
-    public long getTimestamp() {
+    public LocalDateTime getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(long timestamp) {
+    public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
     }
 }
