@@ -76,7 +76,7 @@ public class WeatherService {
         weatherDataRepository.save(weatherData);
     }
 
-    @Scheduled(cron = "0 0 23 * * ?")  // Runs every day at 11 PM
+    @Scheduled(cron = "0 30 21 * * ?")  // Runs every day at 9:30 PM
     public void rollupDailyWeatherSummary() {
         for (String city : cities) {
             LocalDate today = LocalDate.now();
