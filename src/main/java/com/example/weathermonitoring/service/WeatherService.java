@@ -3,18 +3,13 @@ package com.example.weathermonitoring.service;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.stream.Collectors;
-import java.util.Map.Entry;
-import java.util.Arrays;
 
-
-
-
-// import org.hibernate.mapping.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -22,6 +17,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.example.weathermonitoring.model.DailyWeatherSummary;
 import com.example.weathermonitoring.model.WeatherData;
+import com.example.weathermonitoring.repository.DailyWeatherSummaryRepository;
 import com.example.weathermonitoring.repository.WeatherDataRepository;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,6 +30,9 @@ public class WeatherService {
 
     @Value("${openweathermap.api.url}")
     private String apiUrl;
+
+    @Autowired
+    private DailyWeatherSummaryRepository dailyWeatherSummaryRepository;
 
     private final WeatherDataRepository weatherDataRepository;
     private final RestTemplate restTemplate = new RestTemplate();
@@ -92,7 +91,7 @@ public class WeatherService {
                 String dominantCondition = dailyData.stream()
                     .collect(Collectors.groupingBy(WeatherData::getMainCondition, Collectors.counting()))
                     .entrySet().stream()
-                    .max(Map.Entry.comparingByValue()).get().getKey();
+                    .max(Map.Entry.comparingByValue()).map(Map.Entry::getKey).orElse("Unknown");
 
                 DailyWeatherSummary summary = new DailyWeatherSummary();
                 summary.setCity(city);
@@ -107,9 +106,9 @@ public class WeatherService {
         }
     }
 
-    private double temperatureThreshold = 35.0;
-    private int consecutiveExceeds = 2;
-    private Map<String, Integer> exceedCountMap = new HashMap<>();
+    private final double temperatureThreshold = 35.0;
+    private final int consecutiveExceeds = 2;
+    private final Map<String, Integer> exceedCountMap = new HashMap<>();
 
     @Scheduled(fixedRateString = "${data.refresh.interval}")
     public void checkAlerts() {
@@ -128,5 +127,4 @@ public class WeatherService {
             }
         }
     }
-
 }

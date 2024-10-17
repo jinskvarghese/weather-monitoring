@@ -4,24 +4,31 @@
     <title>Daily Weather Summaries</title>
 </head>
 <body>
-<h1>Daily Weather Summaries</h1>
-<table>
-    <tr>
-        <th>City</th>
-        <th>Avg Temp (°C)</th>
-        <th>Max Temp (°C)</th>
-        <th>Min Temp (°C)</th>
-        <th>Dominant Condition</th>
-        <th>Date</th>
-    </tr>
-    <tr th:each="summary : ${summaries}">
-        <td th:text="${summary.city}"></td>
-        <td th:text="${summary.avgTemperature}"></td>
-        <td th:text="${summary.maxTemperature}"></td>
-        <td th:text="${summary.minTemperature}"></td>
-        <td th:text="${summary.dominantCondition}"></td>
-        <td th:text="${summary.date}"></td>
-    </tr>
-</table>
+    <h1>Daily Weather Summaries</h1>
+    
+    <p th:if="${message}" th:text="${message}"></p>
+
+    <table th:if="${weatherData}" border="1">
+        <thead>
+            <tr>
+                <th>City</th>
+                <th>Date</th>
+                <th>Average Temperature</th>
+                <th>Max Temperature</th>
+                <th>Min Temperature</th>
+                <th>Dominant Condition</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="summary : ${summaries}">
+                <td th:text="${summary.city}">City</td>
+                <td th:text="${summary.date}">Date</td>
+                <td th:text="${summary.avgTemperature}">Average Temp</td>
+                <td th:text="${summary.maxTemperature}">Max Temp</td>
+                <td th:text="${summary.minTemperature}">Min Temp</td>
+                <td th:text="${summary.dominantCondition}">Dominant Condition</td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>
