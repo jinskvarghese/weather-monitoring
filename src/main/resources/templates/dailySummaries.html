@@ -1,34 +1,49 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Daily Weather Summaries</title>
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
-    <h1>Daily Weather Summaries</h1>
-    
-    <p th:if="${message}" th:text="${message}"></p>
-
-    <table th:if="${summaries}" border="1">
-        <thead>
-            <tr>
-                <th>City</th>
-                <th>Date</th>
-                <th>Average Temperature</th>
-                <th>Max Temperature</th>
-                <th>Min Temperature</th>
-                <th>Dominant Condition</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="summary : ${summaries}">
-                <td th:text="${summary.city}">City</td>
-                <td th:text="${summary.date}">Date</td>
-                <td th:text="${summary.avgTemperature}">Average Temp</td>
-                <td th:text="${summary.maxTemperature}">Max Temp</td>
-                <td th:text="${summary.minTemperature}">Min Temp</td>
-                <td th:text="${summary.dominantCondition}">Dominant Condition</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="navbar">
+        <a href="/">Home</a>
+        <a href="/daily-summaries">Daily Summaries</a>
+        <a href="/alerts">Alerts</a>
+    </div>
+    <div class="container">
+        <div class="header">
+            <h1>Daily Weather Summaries</h1>
+            <h2>Overview of Today's Weather Data</h2>
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>City</th>
+                        <th>Date</th>
+                        <th>Average Temperature (°C)</th>
+                        <th>Max Temperature (°C)</th>
+                        <th>Min Temperature (°C)</th>
+                        <th>Dominant Condition</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="summary : ${summaries}">
+                        <td th:text="${summary.city}"></td>
+                        <td th:text="${summary.date}"></td>
+                        <td th:text="${summary.avgTemperature}"></td>
+                        <td th:text="${summary.maxTemperature}"></td>
+                        <td th:text="${summary.minTemperature}"></td>
+                        <td th:text="${summary.dominantCondition}"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Weather Monitoring Application</p>
+    </div>
 </body>
 </html>

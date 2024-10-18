@@ -15,8 +15,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.example.weathermonitoring.model.Alert;
 import com.example.weathermonitoring.model.DailyWeatherSummary;
 import com.example.weathermonitoring.model.WeatherData;
+import com.example.weathermonitoring.repository.AlertRepository;
 import com.example.weathermonitoring.repository.DailyWeatherSummaryRepository;
 import com.example.weathermonitoring.repository.WeatherDataRepository;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -119,7 +121,7 @@ public class WeatherService {
 
                 int exceedCount = exceedCountMap.getOrDefault(city, 0) + 1;
                 if (exceedCount >= consecutiveExceeds) {
-                    System.out.println("ALERT: High temperature detected in " + city);
+                    triggerAlert(city);
                     exceedCountMap.put(city, 0); // Reset counter after alert
                 } else {
                     exceedCountMap.put(city, exceedCount);
@@ -127,4 +129,20 @@ public class WeatherService {
             }
         }
     }
+
+    @Autowired
+    private AlertRepository alertRepository;
+
+    private void triggerAlert(String city) {
+        String message = "ALERT: High temperature detected in " + city;
+        System.out.println(message);
+
+        // Save alert to the database
+        Alert alert = new Alert();
+        alert.setCity(city);
+        alert.setMessage(message);
+        alert.setTimestamp(LocalDateTime.now());
+        alertRepository.save(alert);
+    }
+
 }

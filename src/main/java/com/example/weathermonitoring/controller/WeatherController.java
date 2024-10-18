@@ -3,12 +3,15 @@ package com.example.weathermonitoring.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.weathermonitoring.model.DailyWeatherSummary;
+import com.example.weathermonitoring.repository.AlertRepository;
 import com.example.weathermonitoring.repository.DailyWeatherSummaryRepository;
+
 
 @Controller
 public class WeatherController {
@@ -33,6 +36,14 @@ public class WeatherController {
         return "dailySummaries";
     }
 
+    @Autowired
+    private AlertRepository alertRepository;
+
+    @GetMapping("/alerts")
+    public String showAlerts(Model model) {
+        model.addAttribute("alerts", alertRepository.findAll());
+        return "alerts";
+    }
     // @GetMapping("/weather-summary")
     // public String showWeatherSummary(Model model) {
     //     List<DailyWeatherSummary> summaries = summaryRepository.findAll();
