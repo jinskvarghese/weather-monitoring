@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.weathermonitoring.model.Alert;
 import com.example.weathermonitoring.model.DailyWeatherSummary;
+import com.example.weathermonitoring.model.WeatherForecast;
 import com.example.weathermonitoring.repository.AlertRepository;
 import com.example.weathermonitoring.repository.DailyWeatherSummaryRepository;
+import com.example.weathermonitoring.service.WeatherService;
 
 
 @Controller
@@ -70,6 +72,16 @@ public class WeatherController {
             model.addAttribute("message", "No weather data available.");
         }
         return "weatherSummary";
+    }
+
+        @Autowired
+    private WeatherService weatherService;
+
+    @GetMapping("/forecast")
+    public String getWeatherForecast(Model model) {
+        List<WeatherForecast> forecasts = weatherService.getLatestForecasts();
+        model.addAttribute("forecasts", forecasts);
+        return "forecast";
     }
 
 }

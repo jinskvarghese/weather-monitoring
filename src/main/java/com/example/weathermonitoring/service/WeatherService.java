@@ -131,6 +131,14 @@ public class WeatherService {
             weatherForecastRepository.save(forecast);
         }
     }
+
+    public List<WeatherForecast> getLatestForecasts() {
+        // Fetch forecasts for the next 24 hours for all cities
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime tomorrow = now.plusDays(1);
+        return weatherForecastRepository.findByCityAndForecastTimeBetween("", now, tomorrow);
+    }
+    
     
 
     @Scheduled(cron = "0 30 21 * * ?")  // Runs every day at 9:30 PM
