@@ -18,15 +18,25 @@
             <h1>Daily Weather Summaries</h1>
             <h2>Overview of Today's Weather Data</h2>
         </div>
+        <div>
+            <label for="temperatureUnit">Select Temperature Unit:</label>
+            <select id="temperatureUnit" onchange="convertTemperatures()">
+                <option value="celsius">Celsius (°C)</option>
+                <option value="fahrenheit">Fahrenheit (°F)</option>
+                <option value="kelvin">Kelvin (K)</option>
+            </select>
+        </div>
         <div class="table-wrapper">
             <table>
                 <thead>
                     <tr>
                         <th>City</th>
                         <th>Date</th>
-                        <th>Average Temperature (°C)</th>
-                        <th>Max Temperature (°C)</th>
-                        <th>Min Temperature (°C)</th>
+                        <th>Average Temperature</th>
+                        <th>Max Temperature</th>
+                        <th>Min Temperature</th>
+                        <th>Average Humidity</th>
+                        <th>Average Wind Speed</th>
                         <th>Dominant Condition</th>
                     </tr>
                 </thead>
@@ -34,9 +44,11 @@
                     <tr th:each="summary : ${summaries}">
                         <td th:text="${summary.city}"></td>
                         <td th:text="${summary.date}"></td>
-                        <td th:text="${summary.avgTemperature}"></td>
-                        <td th:text="${summary.maxTemperature}"></td>
-                        <td th:text="${summary.minTemperature}"></td>
+                        <td th:text="${summary.avgTemperature}" class="temperature" data-kelvin="${summary.avgTemperature}"></td>
+                        <td th:text="${summary.maxTemperature}" class="temperature" data-kelvin="${summary.maxTemperature}"></td>
+                        <td th:text="${summary.minTemperature}" class="temperature" data-kelvin="${summary.minTemperature}"></td>
+                        <td th:text="${summary.avgHumidity}"></td>
+                        <td th:text="${summary.avgWindSpeed}"></td>
                         <td th:text="${summary.dominantCondition}"></td>
                     </tr>
                 </tbody>
@@ -46,5 +58,32 @@
     <div class="footer">
         <p>&copy; 2024 Weather Monitoring Application</p>
     </div>
+
+    <script>
+        // Function to convert temperatures based on the selected unit
+        function convertTemperatures() {
+            const unit = document.getElementById('temperatureUnit').value;
+            const temperatureElements = document.querySelectorAll('.temperature');
+
+            temperatureElements.forEach(element => {
+                const kelvinValue = parseFloat(element.getAttribute('data-kelvin'));
+                let convertedValue;
+
+                if (unit === 'celsius') {
+                    convertedValue = kelvinValue - 273.15;
+                    element.textContent = convertedValue.toFixed(2) + ' °C';
+                } else if (unit === 'fahrenheit') {
+                    convertedValue = (kelvinValue - 273.15) * 9/5 + 32;
+                    element.textContent = convertedValue.toFixed(2) + ' °F';
+                } else {
+                    convertedValue = kelvinValue;
+                    element.textContent = convertedValue.toFixed(2) + ' K';
+                }
+            });
+        }
+
+        // Initialize conversion to Celsius on page load
+        window.onload = convertTemperatures;
+    </script>
 </body>
 </html>

@@ -19,11 +19,6 @@ body {
     margin-bottom: 40px;
 }
 
-h1 {
-    font-size: 36px;
-    color: #333;
-    margin-bottom: 10px;
-}
 
 h2 {
     font-size: 28px;
@@ -79,26 +74,78 @@ tr:hover {
     left: 0;
 }
 
-/* Additional styles for navigation bar */
+
+
+/* General styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f8ff;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header styling */
+h1 {
+    text-align: center;
+    font-size: 36px;
+    color: #333;
+    margin-top: 20px;
+}
+
+/* Table styling */
+table {
+    width: 80%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+table, th, td {
+    border: 1px solid #ddd;
+}
+
+th, td {
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Navigation bar */
 .navbar {
-    background-color: #007bff;
-    overflow: hidden;
-    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    background-color: #333;
     padding: 10px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .navbar a {
-    float: left;
+    color: white;
     display: block;
-    color: #fff;
-    text-align: center;
-    padding: 14px 16px;
+    padding: 14px 20px;
     text-decoration: none;
-    font-size: 17px;
+    text-align: center;
 }
 
 .navbar a:hover {
-    background-color: #0056b3;
+    background-color: #ddd;
+    color: black;
+}
+
+/* Footer styling */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
     color: white;
+    position: fixed;
+    width: 100%;
+    bottom: 0;
 }

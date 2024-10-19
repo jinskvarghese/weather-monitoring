@@ -2,10 +2,27 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Weather Summary</title>
-    <link rel="stylesheet" th:href="@{/css/styles.css}">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <!-- Navigation Bar -->
+    <div class="navbar">
+        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/daily-summaries}">Daily Summaries</a>
+        <a th:href="@{/weather-summary}">Weather Summary</a>
+        <a th:href="@{/alerts}">Alerts</a>
+    </div>
+
     <h1>Weather Summary</h1>
+    <div>
+        <label for="temperatureUnit">Select Temperature Unit:</label>
+        <select id="temperatureUnit" onchange="convertTemperatures()">
+            <option value="celsius">Celsius (°C)</option>
+            <option value="fahrenheit">Fahrenheit (°F)</option>
+            <option value="kelvin">Kelvin (K)</option>
+        </select>
+    </div>
     <table>
         <thead>
             <tr>
@@ -14,19 +31,217 @@
                 <th>Average Temperature</th>
                 <th>Max Temperature</th>
                 <th>Min Temperature</th>
+                <th>Humidity</th>
+                <th>Wind Speed</th>
                 <th>Dominant Condition</th>
+
             </tr>
         </thead>
         <tbody>
             <tr th:each="summary : ${summaries}">
                 <td th:text="${summary.city}">City</td>
                 <td th:text="${summary.date}">Date</td>
-                <td th:text="${summary.avgTemperature}">Average Temp</td>
-                <td th:text="${summary.maxTemperature}">Max Temp</td>
-                <td th:text="${summary.minTemperature}">Min Temp</td>
+                <td th:text="${summary.avgTemperature}" class="temperature" data-kelvin="${summary.avgTemperature}">Average Temp</td>
+                <td th:text="${summary.maxTemperature}" class="temperature" data-kelvin="${summary.maxTemperature}">Max Temp</td>
+                <td th:text="${summary.minTemperature}" class="temperature" data-kelvin="${summary.minTemperature}">Min Temp</td>
+                <td th:text="${summary.humidity}">Humidity</td>
+                <td th:text="${summary.windSpeed}">Wind Speed</td>
                 <td th:text="${summary.dominantCondition}">Dominant Condition</td>
+
             </tr>
         </tbody>
     </table>
+
+    <!-- Line chart for historical temperature trends -->
+    <div>
+        <h2>Temperature Trends</h2>
+        <canvas id="temperatureChart"></canvas>
+    </div>
+
+        <!-- Bar chart for humidity levels -->
+        <div>
+            <h2>Humidity Levels</h2>
+            <canvas id="humidityChart"></canvas>
+        </div>
+    
+        <!-- Line chart for wind speed trends -->
+        <div>
+            <h2>Wind Speed Trends</h2>
+            <canvas id="windSpeedChart"></canvas>
+        </div>
+
+    <!-- Pie chart for dominant weather conditions -->
+    <div>
+        <h2>Dominant Weather Conditions</h2>
+        <canvas id="conditionChart"></canvas>
+    </div>
+
+    <script>
+        // Data for charts
+        const cities = /*[[${summaries.?[city]}]]*/ [];
+        const avgTemperatures = /*[[${summaries.?[avgTemperature]}]]*/ [];
+        const maxTemperatures = /*[[${summaries.?[maxTemperature]}]]*/ [];
+        const minTemperatures = /*[[${summaries.?[minTemperature]}]]*/ [];
+        const avgHumidity = /*[[${summaries.?[avgHumidity]}]]*/ [];
+        const avgWindSpeed = /*[[${summaries.?[avgWindSpeed]}]]*/ [];
+        const dominantConditions = /*[[${summaries.?[dominantCondition]}]]*/ [];
+
+        // Line chart for temperature trends
+        const temperatureChartCtx = document.getElementById('temperatureChart').getContext('2d');
+        new Chart(temperatureChartCtx, {
+            type: 'line',
+            data: {
+                labels: cities,
+                datasets: [
+                    {
+                        label: 'Average Temperature',
+                        data: avgTemperatures,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        fill: false
+                    },
+                    {
+                        label: 'Max Temperature',
+                        data: maxTemperatures,
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        fill: false
+                    },
+                    {
+                        label: 'Min Temperature',
+                        data: minTemperatures,
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        fill: false
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Temperature Trends'
+                    }
+                }
+            }
+        });
+
+                // Bar chart for humidity levels
+                const humidityChartCtx = document.getElementById('humidityChart').getContext('2d');
+        new Chart(humidityChartCtx, {
+            type: 'bar',
+            data: {
+                labels: cities,
+                datasets: [{
+                    label: 'Average Humidity',
+                    data: avgHumidity,
+                    backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                    borderColor: 'rgba(153, 102, 255, 1)',
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Humidity Levels'
+                    }
+                }
+            }
+        });
+
+        // Line chart for wind speed trends
+        const windSpeedChartCtx = document.getElementById('windSpeedChart').getContext('2d');
+        new Chart(windSpeedChartCtx, {
+            type: 'line',
+            data: {
+                labels: cities,
+                datasets: [{
+                    label: 'Average Wind Speed',
+                    data: avgWindSpeed,
+                    borderColor: 'rgba(255, 159, 64, 1)',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Wind Speed Trends'
+                    }
+                }
+            }
+        });
+
+        // Pie chart for dominant weather conditions
+        const conditionChartCtx = document.getElementById('conditionChart').getContext('2d');
+        const conditionCount = dominantConditions.reduce((acc, condition) => {
+            acc[condition] = (acc[condition] || 0) + 1;
+            return acc;
+        }, {});
+
+        new Chart(conditionChartCtx, {
+            type: 'pie',
+            data: {
+                labels: Object.keys(conditionCount),
+                datasets: [{
+                    data: Object.values(conditionCount),
+                    backgroundColor: [
+                        'rgba(153, 102, 255, 0.6)',
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 99, 132, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Dominant Weather Conditions'
+                    }
+                }
+            }
+        });
+    </script>
+        <script>
+            // Function to convert temperatures based on the selected unit
+            function convertTemperatures() {
+                const unit = document.getElementById('temperatureUnit').value;
+                const temperatureElements = document.querySelectorAll('.temperature');
+    
+                temperatureElements.forEach(element => {
+                    const kelvinValue = parseFloat(element.getAttribute('data-kelvin'));
+                    let convertedValue;
+    
+                    if (unit === 'celsius') {
+                        convertedValue = kelvinValue - 273.15;
+                        element.textContent = convertedValue.toFixed(2) + ' °C';
+                    } else if (unit === 'fahrenheit') {
+                        convertedValue = (kelvinValue - 273.15) * 9/5 + 32;
+                        element.textContent = convertedValue.toFixed(2) + ' °F';
+                    } else {
+                        convertedValue = kelvinValue;
+                        element.textContent = convertedValue.toFixed(2) + ' K';
+                    }
+                });
+            }
+    
+            // Initialize conversion to Celsius on page load
+            window.onload = convertTemperatures;
+        </script>
+
+    <a th:href="@{/alerts}">Go to Alerts</a>
+    <a th:href="@{/home}">Home</a>
 </body>
 </html>

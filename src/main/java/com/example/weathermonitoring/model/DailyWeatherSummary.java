@@ -1,10 +1,11 @@
 package com.example.weathermonitoring.model;
 
+import java.time.LocalDate;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import java.time.LocalDate;
 
 @Entity
 public class DailyWeatherSummary {
@@ -18,6 +19,8 @@ public class DailyWeatherSummary {
     private double minTemperature;
     private String dominantCondition;
     private LocalDate date;
+    private double avgHumidity;
+    private double avgWindSpeed;
 
     // Getters and setters
     public Long getId() {
@@ -75,4 +78,20 @@ public class DailyWeatherSummary {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+
+    public double getAvgHumidity() {
+        return avgHumidity;
+    }
+
+    public void setAvgHumidity(double avgHumidity) {
+        this.avgHumidity = avgHumidity;
+    }
+
+    public double getAvgWindSpeed() {
+        return avgWindSpeed;
+    }
+
+    public void setAvgWindSpeed(double avgWindSpeed) {
+        this.avgWindSpeed = avgWindSpeed;
+}
 }

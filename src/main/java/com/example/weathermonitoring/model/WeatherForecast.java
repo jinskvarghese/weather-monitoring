@@ -8,8 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class WeatherData {
-
+public class WeatherForecast {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -17,11 +16,11 @@ public class WeatherData {
     private String mainCondition;
     private double temperature;
     private double feelsLike;
-    private LocalDateTime timestamp;
-    private int humidity;
+    private double humidity;
     private double windSpeed;
+    private LocalDateTime forecastTime;
 
-
+    // Getters and setters
     public Long getId() {
         return id;
     }
@@ -62,19 +61,11 @@ public class WeatherData {
         this.feelsLike = feelsLike;
     }
 
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-
-    public int getHumidity() {
+    public double getHumidity() {
         return humidity;
     }
 
-    public void setHumidity(int humidity) {
+    public void setHumidity(double humidity) {
         this.humidity = humidity;
     }
 
@@ -84,5 +75,13 @@ public class WeatherData {
 
     public void setWindSpeed(double windSpeed) {
         this.windSpeed = windSpeed;
+    }
+
+    public LocalDateTime getForecastTime() {
+        return forecastTime;
+    }
+
+    public void setForecastTime(LocalDateTime forecastTime) {
+        this.forecastTime = forecastTime;
     }
 }
