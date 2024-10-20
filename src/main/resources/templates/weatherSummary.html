@@ -8,7 +8,7 @@
 <body>
     <!-- Navigation Bar -->
     <div class="navbar">
-        <a th:href="@{/home}">Home</a>
+        <a th:href="@{/}">Home</a>
         <a th:href="@{/daily-summaries}">Daily Summaries</a>
         <a th:href="@{/weather-summary}">Weather Summary</a>
         <a th:href="@{/forecast}">Forecast</a>
@@ -76,6 +76,7 @@
         <h2>Dominant Weather Conditions</h2>
         <canvas id="conditionChart"></canvas>
     </div>
+    
 
     <script>
         // Data for charts
@@ -244,5 +245,8 @@
 
     <a th:href="@{/alerts}">Go to Alerts</a>
     <a th:href="@{/home}">Home</a>
+    <div class="footer">
+        <p>&copy; 2024 Weather Monitoring Application</p>
+    </div>
 </body>
 </html>
